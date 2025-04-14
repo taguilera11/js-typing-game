@@ -88,18 +88,26 @@ document.getElementById('game').addEventListener('keyup', ev => {
 
   if (isLetter) {
     if (currentLetter) {
-      addClass(currentLetter, key === expected ? 'correct' : 'incorrect');
+      // Guardamos la letra original (esperada) como atributo si aún no está guardada
+      if (!currentLetter.dataset.expected) {
+        currentLetter.dataset.expected = currentLetter.innerHTML;
+      }
+  
+      if (key === expected) {
+        addClass(currentLetter, 'correct');
+      } else {
+        addClass(currentLetter, 'incorrect');
+        currentLetter.innerHTML = key; // Mostramos la letra incorrecta
+      }
+  
       removeClass(currentLetter, 'current');
+  
       if (currentLetter.nextSibling) {
         addClass(currentLetter.nextSibling, 'current');
       }
-    } else {
-      const incorrectLetter = document.createElement('span');
-      incorrectLetter.innerHTML = key;
-      incorrectLetter.className = 'letter incorrect extra';
-      currentWord.appendChild(incorrectLetter);
     }
   }
+  
 
   if (isSpace) {
     if (expected !== ' ') {
@@ -123,20 +131,30 @@ document.getElementById('game').addEventListener('keyup', ev => {
       addClass(currentWord.previousSibling, 'current');
       removeClass(currentLetter, 'current');
       addClass(currentWord.previousSibling.lastChild, 'current');
-      removeClass(currentWord.previousSibling.lastChild, 'incorrect');
-      removeClass(currentWord.previousSibling.lastChild, 'correct');
+      removeClass(currentLetter.previousSibling, 'incorrect');
+      removeClass(currentLetter.previousSibling, 'correct');
+      if (currentLetter.previousSibling.dataset.expected) {
+        currentLetter.previousSibling.innerHTML = currentLetter.previousSibling.dataset.expected;
+      }
     }
     if (currentLetter && !isFirstLetter) {
       // move back one letter, invalidate letter
+      
       removeClass(currentLetter, 'current');
       addClass(currentLetter.previousSibling, 'current');
       removeClass(currentLetter.previousSibling, 'incorrect');
       removeClass(currentLetter.previousSibling, 'correct');
+      if (currentLetter.previousSibling.dataset.expected) {
+        currentLetter.previousSibling.innerHTML = currentLetter.previousSibling.dataset.expected;
+      }
     }
     if (!currentLetter) {
       addClass(currentWord.lastChild, 'current');
-      removeClass(currentWord.lastChild, 'incorrect');
-      removeClass(currentWord.lastChild, 'correct');
+      removeClass(currentLetter.previousSibling, 'incorrect');
+      removeClass(currentLetter.previousSibling, 'correct');
+      if (currentLetter.previousSibling.dataset.expected) {
+        currentLetter.previousSibling.innerHTML = currentLetter.previousSibling.dataset.expected;
+      }
     }
   }
 
