@@ -157,7 +157,7 @@ document.getElementById('game').addEventListener('keyup', ev => {
       }
     }
   }
-
+  
   // move lines / words
   if (currentWord.getBoundingClientRect().top > 250) {
     const words = document.getElementById('words');
