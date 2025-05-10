@@ -138,7 +138,7 @@ document.getElementById('game').addEventListener('keyup', ev => {
       }
     }
     if (currentLetter && !isFirstLetter) {
-      // move back one letter, invalidate letter
+      // move back one letter,invalidate letter
       
       removeClass(currentLetter, 'current');
       addClass(currentLetter.previousSibling, 'current');
